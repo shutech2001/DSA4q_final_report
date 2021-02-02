@@ -65,7 +65,7 @@ int getBalance(lib_data_avl *N)
     return height(N->left) - height(N->right);
 }
 
-lib_data_avl *insert_avl(lib_data_avl *node, char *key)
+lib_data_avl *insert_avl(lib_data_avl *node, char *word)
 {
     /* Implement normal BST insertion */
   
