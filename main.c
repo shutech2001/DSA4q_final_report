@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 
 		if (!(phone_number[i] > 1 && phone_number[i] < 10))
 		{
-			printf("\nOnly combinations of numbers 2~9 can be accepted.");
+			printf("\nOnly combinations of numbers 2~9 can be accepted.\n");
 			exit(1);
 		}
 	}
