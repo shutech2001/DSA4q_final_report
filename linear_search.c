@@ -9,7 +9,7 @@ lib_data_linear* make_dictionary_linear(const char* file_path)
     char temp_word[255]; // Temporal array for saving word. 
     int i = 0;
 	/*Implement a function to make a dictionary using the linked list here.*/
-	
+	//
 	/**/
 
 	return head;
