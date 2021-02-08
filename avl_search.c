@@ -19,10 +19,13 @@ struct lib_data_avl *new_AVL_node(char *word)
     char *new_word = (char *)malloc(strlen(word) + 1);
     
     /*Please implement this function.*/
+    
+    //if no node in left and right, height is equal to 0
     node->left = NULL; node->right = NULL;
     strcpy(new_word, word);
     node->word = new_word;
     node->height = 0;
+    
     /**/
 
     return node;
@@ -72,38 +75,55 @@ int getBalance(lib_data_avl *N)
 lib_data_avl *insert_avl(lib_data_avl *node, char *word)
 {
     /* Implement normal BST insertion */
+    
     if(node == NULL){
+        //insert node
         node = new_AVL_node(word);
     }
     else{
         if(strcmp(node->word, word) > 0){
+            //if word is small in dictionary order, move to left tree
             node->left = insert_avl(node->left, word);
+            //after inserting node, fix node height
             node->height = get_max(height(node->left), height(node->right)) + 1;
         }
         else{
+            //if word is big in dictionary order, move to right tree
             node->right = insert_avl(node->right, word);
+            //after inserting node, fix node height
             node->height = get_max(height(node->left), height(node->right)) + 1;
         }
     }
     /*Implement these cases*/
     // Left Left Case
+    // ==>> left tree higher than right tree in terms of node and left node
     if(getBalance(node) > 1 && getBalance(node->left) > 0){
+        //single right rotation
         node = rightRotate(node);
     }
     // Right Right Case
+    // ==>> right tree higher than left tree in terms of node and right node
     if(getBalance(node) < -1 && getBalance(node->right) < 0){
+        //single left rotation
         node = leftRotate(node);
     }
     // Left Right Case
+    // ==>> left tree higher than right tree(node)
+    //  and right tree higher than left tree(left node)
     if(getBalance(node) > 1 && getBalance(node->left) < 0){
+        //double left-right rotation
         node->left = leftRotate(node->left);
         node = rightRotate(node);
     }
     // Right Left Case
+    // ==>> right tree higher than left tree(node)
+    //  and left tree higher than right tree(right node)
     if(getBalance(node) < -1 && getBalance(node->right) > 0){
+        //double right-left rotation
         node->right = rightRotate(node->right);
         node = leftRotate(node);
     }
+    
     /**/
     return node;
 }
@@ -116,12 +136,14 @@ lib_data_avl *make_dictionary_AVL(const char *file_path)
     int i = 0;
     
     /*Implement a function to make a dictionary using the AVL tree here.*/
+
     if((fp = fopen(file_path, "r")) != NULL){
-        while(fscanf(fp, "%s", temp_word) != EOF){
+        while(fscanf(fp, "%s", temp_word) != EOF){//to end of the file
             head = insert_avl(head, temp_word);
         }
     }
     fclose(fp);
+    
     /**/
 
     return head;
@@ -130,18 +152,19 @@ lib_data_avl *make_dictionary_AVL(const char *file_path)
 void print_candidates_AVL(lib_data_avl *root_node, const char *mnemonic_word)
 {
     /*Implement a function to print candidates included in the dictionary file.*/
-    lib_data_avl* temp = root_node;
-    while(temp != NULL){
-        if(strcmp(temp->word, mnemonic_word) == 0){
-            printf("%s ", mnemonic_word);
-            break;
-        }
-        else if (strcmp(temp->word, mnemonic_word) > 0){
-            temp = temp->left;
-        }
-        else{
-            temp = temp->right;
-        }
-    }
+
+    //use recursion
+    
+    if(root_node==NULL); //do nothing
+
+    //if the same word, print
+    else if(strcmp(root_node->word, mnemonic_word) == 0) printf("%s ", mnemonic_word);
+    //search left tree
+    else if(strcmp(root_node->word, mnemonic_word) > 0) 
+        print_candidates_AVL(root_node->left, mnemonic_word);
+    //search right tree
+    else
+        print_candidates_AVL(root_node->right, mnemonic_word);
+    
     /**/
 }
