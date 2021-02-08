@@ -1,5 +1,5 @@
 CC = gcc
-CFAGS = -O
+CFLAGS = -O
 TARGET = final_project.out
 OBJECTS =  avl_search.o bst_search.o linear_search.o common.o mnemonic.o main.o
 
